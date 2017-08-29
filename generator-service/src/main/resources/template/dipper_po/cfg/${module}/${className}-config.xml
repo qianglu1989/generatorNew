@@ -1,0 +1,23 @@
+<#assign className = table.className> 
+<#assign classNameLower = className?uncap_first>
+------------------Dao层配置开始------------------------
+------------------mybaits-config.xml-------------
+<typeAlias alias="${className}" type="${basepackage}.${className}Po"/>
+------------------Dao层配置结束------------------------
+-----------------service层配置开始------------------------
+-----------------Dao.xml------------
+<bean id="${classNameLower}Dao" class="${basicpackage}.dao.impl.${className}DaoImpl" parent="baseDao"/>
+-----------------service.xml---------------------
+<bean id="${classNameLower}Service" class="${basicpackage}.service.impl.${className}ServiceImpl">
+	<property name="${classNameLower}Dao" ref="${classNameLower}Dao" />
+</bean>
+------------------dubbo-provider.xml--------------
+<dubbo:service interface="${basicpackage}.service.${className}Service" ref="${classNameLower}Service"/>
+-----------------service层配置结束-----------------------------
+
+-----------------controller层配置开始------------------------
+
+-----------------dubbo-consumer.xml----------
+<dubbo:reference id="${classNameLower}Service" interface="${basicpackage}.service.${className}Service" />
+
+----------------controller层配置结束------------------------
